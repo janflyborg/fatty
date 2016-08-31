@@ -1,3 +1,4 @@
+
 // wininput.c (part of FaTTY)
 // Copyright 2015 Juho Peltonen
 // Based on code from mintty by Andy Koppe
@@ -314,6 +315,16 @@ send_syscommand(WPARAM cmd)
   SendMessage(wnd, WM_SYSCOMMAND, cmd, ' ');
 }
 
+static void
+set_tab_index(int index)
+{
+  if (index < 0 || index >= win_tab_count()) {
+    return;
+  }
+  set_active_tab(index);
+}
+
+
 bool
 win_key_down(WPARAM wp, LPARAM lp)
 {
@@ -429,8 +440,8 @@ win_key_down(WPARAM wp, LPARAM lp)
     }
 
     // Alt+Fn shortcuts
-    if (cfg.alt_fn_shortcuts && alt && VK_F1 <= key && key <= VK_F24) {
-      if (!ctrl) {
+    if (cfg.alt_fn_shortcuts && VK_F1 <= key && key <= VK_F24) {
+      if (!alt && ctrl) {
         switch (key) {
           when VK_F2:  send_syscommand(IDM_NEW);
           when VK_F4:  send_syscommand(SC_CLOSE);
@@ -439,8 +450,22 @@ win_key_down(WPARAM wp, LPARAM lp)
           when VK_F11: send_syscommand(IDM_FULLSCREEN);
           when VK_F12: send_syscommand(IDM_FLIPSCREEN);
         }
+	return 1;
+      } else if (alt && !ctrl) {
+	switch(key) {
+	  when VK_F1:  set_tab_index(0);
+	  when VK_F2:  set_tab_index(1);
+	  when VK_F3:  set_tab_index(2);
+	  when VK_F4:  set_tab_index(3);
+	  when VK_F5:  set_tab_index(4);
+	  when VK_F6:  set_tab_index(5);
+	  when VK_F7:  set_tab_index(6);
+	  when VK_F8:  set_tab_index(7);
+	  when VK_F9:  set_tab_index(8);
+	  when VK_F10: set_tab_index(9);
+	}
+	return 1;
       }
-      return 1;
     }
 
     // Ctrl+Shift+letter shortcuts

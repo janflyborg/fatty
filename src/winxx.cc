@@ -102,7 +102,7 @@ static void update_window_state() {
     win_adapt_term_size();
 }
 
-static void set_active_tab(unsigned int index) {
+void set_active_tab(unsigned int index) {
     active_tab = index;
     Tab* active = &tabs.at(active_tab);
     for (auto& tab : tabs) {

@@ -69,6 +69,7 @@ void win_tab_create();
 void win_tab_clean();
 void win_tab_attention(struct term* term);
 void win_tab_title(struct term* term, wchar_t* title);
+void set_active_tab(unsigned int index);
 
 void win_tab_mouse_click(int x);
 int win_tab_height();
